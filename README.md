@@ -2,7 +2,12 @@
 Is a project for a Web Mining and Big Data Analytics class at HES-SO Master. This project uses Wikipedia database which contains copies of all available content.
 
 ## Web Mining
-* Not defined yet 
+### Objectifs
+* Crawl the entirety of the English Wikipedia in this manner (code should be easily adaptable to other languages)
+* Calculate an up-to-date estimate of how many pages lead to Philosophy
+* Calculate connected components sizes
+* Estimate average distance from a random page to Philosophy
+* Graph visualisation if feasible
 
 
 ## Big Data Analytics
