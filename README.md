@@ -59,17 +59,17 @@
 
 ### Graph generation
 
-- Each page represents a graph vertex
+Each page represents a graph vertex. Easy to create an edge list using the index
 
-- Easy to create an edge list using the index
+- Unzip 100 pages
+- For each page, find the first hyperlink not in italic or parentheses
+- Place the start and end vertices separated by a tab character in a file
 
-- - Unzip 100 pages
-  - For each page, find the first hyperlink not in italic or parentheses
-  - Place the start and end vertices separated by a tab character in a file
+This work is done after executing [`src/extract_wikilinks.py`](https://github.com/RaedAbr/Wikilosophy/blob/master/src/extract_wikilinks.py) python script. The size of edge list should be around the same size as the index since they both contain one line per page. This must only be done once (unless using a different dump or language)
 
-- Size of edge list should around the same size as the index since they both contain one line per page
+Then, based on the output of the parsing, we clean our file using the [`src/clean_data.py`](https://github.com/RaedAbr/Wikilosophy/blob/master/src/clean_data.py) python script (remove internal links, files links, wikimedia links..)
 
-- Must only be done once (unless using a different dump or language)
+Finally, we create a file containing all pages titles (all nodes) via script [`src/build_nodes.py`](https://github.com/RaedAbr/Wikilosophy/blob/master/src/build_nodes.py)
 
 
 ## Planification and work 
