@@ -24,17 +24,23 @@ d3.tsv("./output.csv", function(error, rows) {
     var graphPath = new vis.DataSet(options);
     var graphEdges = new vis.DataSet(options);
 
+    var loop = true; // determine whether we ended with a loop or deadend
     while(!path.includes(next)){
         path.push(next);
         var id = next.hashCode()
         graphPath.add({id: id, label: next, color: next == "philosophy" ? "red" : "cyan"});
         if(path.length > 1){
-            graphEdges.add({from: path[path.length - 2].hashCode(), to: id})
+            graphEdges.add({from: path[path.length - 2].hashCode(), to: id, arrows: 'to'})
         }
         var next2 = edges.get(next);
         if(next2 != null){
             next = next2
+        } else {
+            loop = false;
         }
+    }
+    if(loop){
+        graphEdges.add({from: path[path.length - 1].hashCode(), to: next.hashCode(), arrows: 'to'})
     }
 
     console.log(path);
