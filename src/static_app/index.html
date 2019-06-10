@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+    <title>Neovis.js Simple Example</title>
+    <style type="text/css">
+        html, body {
+            font: 16pt arial;
+        }
+        #viz {
+            width: 100%;
+            height: 600px;
+            border: 1px solid lightgray;
+            font: 22pt arial;
+        }
+    </style>
+
+    <!-- FIXME: load from dist -->
+    <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
+
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+		// define config car
+		// instantiate nodevis object
+		// draw
+		var viz;
+		function draw() {
+			var config = {
+				container_id: "viz",
+				server_url: "bolt://ec2-54-86-68-3.compute-1.amazonaws.com:7687",
+				server_user: "neo4j",
+				server_password: "i-068dfc9ff6dd04a36",
+				labels: {
+					//"Character": "name",
+					"Page": {
+						caption: "title",
+						size: "pagerank",
+                        community: "partition"
+						//"sizeCypher": "MATCH (n) WHERE id(n) = {id} MATCH (n)-[r]-() RETURN sum(r.weight) AS c"
+					}
+				},
+				relationships: {
+					"FIRST_LINK": {
+						caption: false,
+						thickness: "count"
+					}
+				},
+				initial_cypher: "MATCH p=()-[r:FIRST_LINK]->() RETURN p LIMIT 100"
+			};
+			viz = new NeoVis.default(config);
+			viz.render();
+			console.log(viz);
+		}
+    </script>
+</head>
+<body onload="draw()">
+<div id="viz"></div>
+
+
+Cypher query: <textarea rows="4" cols=50 id="cypher"></textarea><br>
+<input type="submit" value="Submit" id="reload">
+<input type="submit" value="Stabilize" id="stabilize">
+<input type="submit" value="Philosophy" id="philosophy">
+<input type="submit" value="Shortest Path" id="shortest">
+
+
+</body>
+
+<script>
+	$("#reload").click(function() {
+		var cypher = $("#cypher").val();
+		if (cypher.length > 3) {
+			viz.renderWithCypher(cypher);
+		} else {
+			console.log("reload");
+			viz.reload();
+		}
+	});
+	$("#stabilize").click(function() {
+		viz.stabilize();
+	})
+	$("#philosophy").click(function() {
+		viz.renderWithCypher("MATCH p=()-[r:FIRST_LINK]->({title: 'philosophy'}) RETURN p LIMIT 1000")
+	})
+	$("#shortest").click(function() {
+		
+		var txUrl = "http://ec2-54-86-68-3.compute-1.amazonaws.com:7474/db/data/transaction/commit";
+		function cypher(query,cb) {
+			$.ajax({
+				url: txUrl,
+				type: "post",
+				headers: {
+					Authorization: "Basic bmVvNGo6aS0wNjhkZmM5ZmY2ZGQwNGEzNg==",
+					"Content-Type": "application/json"
+				},
+				dataType: "application/json",
+				data: {
+					statements:[{
+						statement:query,
+						"resultDataContents" : [ "row" ]
+					}]
+				},
+				success: function(data) {
+					console.log("hello")
+					cb(null, res.body)
+				}
+			})
+		}
+
+
+		var query="MATCH (start:Page{title:'philosophy'}), (end:Page{title:'semla (mythology)'})" + 
+		"CALL algo.shortestPath.stream(start, end, 'cost')" +
+		"YIELD nodeId, cost RETURN algo.asNode(nodeId).title AS title, cost"
+		var cb=function(err,data) { console.log(JSON.stringify(data)) }
+
+		cypher(query,cb)
+	})
+</script>
+</html>
