@@ -216,7 +216,11 @@ ORDER by count(r) DESC;
   MATCH (a:Page)-[FIRST_LINK*10]->(p:Page{title:"philosophy"}) RETURN count(a)
   ```
 
-  
+By counting these pages, for distance 1 to n (we stopped when no more paths appeared), we can create a histogram of how many pages are at distance n of Philosophy:
+
+![](./Screenshot/histogram.png)
+
+We can see that the distances resemble a normal distribution centred around 10. The majority of pages lead to Philosophy in 8-12 pages using the initial observation.
 
 ## Techniques, algorithms and tools
 
