@@ -14,7 +14,7 @@ String.prototype.hashCode = function() {
 //load data into map
 d3.tsv("./output.csv", function(error, rows) {
     rows.forEach(function(d){
-      edges.set(d.from.toLowerCase(), d.to.toLowerCase());
+      edges.set(d.src.toLowerCase(), d.dest.toLowerCase());
     });
     
     var next = prompt("Please enter a start page!", "Hello");
