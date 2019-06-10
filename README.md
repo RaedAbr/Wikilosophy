@@ -226,8 +226,7 @@ var config = {
 ```
 
 ------
-
-### Neo4j analysis
+### <a name="commands">Neo4j analysis
 
 * Authorities leading to **philosophy** page
 
@@ -269,24 +268,39 @@ ORDER by count(r) DESC;
 
   ![](Screenshots/path_between_random_page_philosophy.png)
 
-* Count the number of pages leading to **philosophy** after `10` link
+*  <a name="histo">Count the number of pages leading to **philosophy** after `10` link
 
   ```cypher
   MATCH (a:Page)-[FIRST_LINK*10]->(p:Page{title:"philosophy"}) RETURN count(a)
   ```
 
-  
+By counting these pages, for distance 1 to n (we stopped when no more paths appeared), we can create a histogram of how many pages are at distance n of Philosophy:
+
+![](./Screenshots/histogram.png)
+
+We can see that the distances resemble a normal distribution centred around 10. The majority of pages lead to Philosophy in 8-12 pages using the initial observation.
 
 ## Techniques, algorithms and tools
 
 ### Tools
-- Java
-
-- Apache Commons Compress API for decompression (Allows the use of an offset)
-
+- Python scripts to parse Wikipedia
+- [mwparserfromhell](https://github.com/earwig/mwparserfromhell) to help extract Wikicode
+- Python Bz2 library to decompress the archive with offsets
 - Neo4j (Allows graph analysis and importation using an edge list)
+- An Amazon AWS instance to store and perform operations on the graph
+
 ### Algorithms
 #### Connected components
+We used the neo4j [unionFind](https://neo4j.com/docs/graph-algorithms/current/algorithms/connected-components/) algorithm to calculate connected components and their sizes.
 
+#### Unused
+While we initially tried to use neo4j's  [centrality algorithms](https://neo4j.com/docs/graph-algorithms/current/algorithms/centrality/) (notably PageRank and Harmonic Centrality on the inverted graph to calculate distances) we were unably to do so due to memory and time constraints. The PageRank algorithm quickly crashed due to lack of memory and the Harmonic Centrality did not terminate after several hours. We instead manually checked how many nodes were at distance n (see [here](#histo)).
 
+#### Other
+All neo4j commands used can be found [here](#commands).
 ## Conclusion
+During our analysis, we discovered that Philosophy is not contained in a loop like on the current Wikipedia site (10.06.2019). Indeed, it leads to the page "Mathematics", which is included in a loop. Therefore, all pages in the connected component do not necessarily lead to Philosophy, but to Mathematics. This means that the inital observation, which was made and tested back in February 2013, was not accurate as of the time our data dump was taken (01.01.2019). 
+
+
+Due to some issues with our parser (especially redirect pages) we have more dead ends than expected and often fail to continue a path despite there being one after the redirect. We also notice a large discrepancy between between the number of pages in the connected component and the number of pages which lead to "Philosophy" with distances 1...n. This is because since Philosophy is no longer part of a loop, we are not guaranteed that all pages in the connected component will end up there. As of the 1st of January 2019, the true king of Wikipedia was no longer Philosophy, but Mathematics.
+
