@@ -119,7 +119,9 @@ The vis.js application does not rely on a graph to find paths, rather it stores 
 
 ![](./Screenshots/pathviewer.png)
 
-In this case, "web mining" eventually leads to "quantitative property", which contains a redirect link and therefore does not appear in the Map, ending the path. Redirects are not properly handled by our parser, leading to prematurely ending some paths.
+In this case, "web mining" eventually leads to "quantitative property", which contains a redirect link and therefore does not appear in the Map, ending the path. Redirects are not properly handled by our parser, leading to prematurely ending some paths. A longer path, including philosophy, can be seen here:
+
+![](./Screenshots/fullpath.png)
 ### Neovis application
 
 This is a graph visualization tool powered by vis.js with data from Neo4j. We can use this tool in a simple html page using javascript. First we include the `neovis.js` file:
