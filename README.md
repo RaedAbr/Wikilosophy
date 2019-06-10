@@ -80,16 +80,25 @@
 - Finish project, complete report, add any additional features like visualisations (By 07.06)
 - Finishing touches for project end date (10.06)
 
-## Functionalities
+## Functionalities and results
+### Vis.js application (proof-of-concept)
+The vis.js application does not rely on a graph to find paths, rather it stores all edges in a Map (src -> dest) and uses it to find a path. After prompting the user for a starting node, it queries the Map for a next node. If it exists, it adds both nodes and a link between them to a vis.js network and repeats using the next node as input. When the map does not return a next node, the loop stops and the graph is displayed.
 
-## Techniques, algorithmes and tools
+![](./Screenshots/pathviewer.png)
+
+In this case, "web mining" eventually leads to "quantitative property", which contains a redirect link and therefore does not appear in the Map, ending the path. Redirects are not properly handled by our parser, leading to prematurely ending some paths.
+### Neovis application
+### Neo4j analysis
+
+## Techniques, algorithms and tools
 ### Tools
 - Java
 
 - Apache Commons Compress API for decompression (Allows the use of an offset)
 
 - Neo4j (Allows graph analysis and importation using an edge list)
-
+### Algorithms
+#### Connected components
 
 
 ## Conclusion
