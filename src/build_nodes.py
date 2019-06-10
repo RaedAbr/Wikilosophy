@@ -14,11 +14,5 @@ if __name__ == "__main__":
             data2.append(str(row[1]).strip() + "\n")
 
     nodes = list(set().union(data1, data2))
-    print(nodes[0])
-    print(nodes[1])
-    print(nodes[2])
-    print(len(nodes))
-    print(data2.count("philosophy\n"))
-    print(data1.count("philosophy\n"))
     with open(nodes_file, "w") as f:
         f.writelines(nodes)
