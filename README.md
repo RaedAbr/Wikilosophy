@@ -168,7 +168,7 @@ var config = {
 };
 ```
 
-### Neo4j analysis
+### <a name="commands">Neo4j analysis
 
 * Authorities leading to **philosophy** page
 
@@ -238,6 +238,8 @@ We used the neo4j [unionFind](https://neo4j.com/docs/graph-algorithms/current/al
 #### Unused
 While we initially tried to use neo4j's  [centrality algorithms](https://neo4j.com/docs/graph-algorithms/current/algorithms/centrality/) (notably PageRank and Harmonic Centrality on the inverted graph to calculate distances) we were unably to do so due to memory and time constraints. The PageRank algorithm quickly crashed due to lack of memory and the Harmonic Centrality did not terminate after several hours. We instead manually checked how many nodes were at distance n (see [here](#histo)).
 
+#### Other
+All neo4j commands used can be found [here](#commands).
 ## Conclusion
 
 
