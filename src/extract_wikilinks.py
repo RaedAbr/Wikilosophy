@@ -3,9 +3,10 @@ from xml.etree import ElementTree
 import mwparserfromhell as wikiparser
 import os
 
-index_file_path = "data/enwiki-20190101-pages-articles-multistream-index.txt.bz2"
-multistream_file_path = "data/enwiki-20190101-pages-articles-multistream.xml.bz2"
+index_file_path = "data/simplewiki-20190520-pages-articles-multistream-index.txt.bz2"
+multistream_file_path = "data/simplewiki-20190520-pages-articles-multistream.xml.bz2"
 temp_file = "data/temp.xml.bz2"
+output_file_path = "data/output_simple.csv"
 SHIFT = 100
 
 
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     print(len(index_content))
 
     # Create output file, write data on it (100 lines in each iteration)
-    output_file = open("output_file.csv", "w")
+    output_file_path = open(output_file_path, "w")
     current_shift = SHIFT
     while current_shift < len(index_content):
         # Calculate the start offset, end offset and the amount of bytes to be extracted
@@ -123,10 +124,10 @@ if __name__ == '__main__':
 
                 if isinstance(node, wikiparser.wikicode.Wikilink):
                     next_page = str(node.title)
-                    output_file.write(page_title + "\t" + next_page + "\n")
+                    output_file_path.write(page_title + "\t" + next_page + "\n")
                     # print(page_title + " => " + next_page)
                     break
 
         current_shift = current_shift + SHIFT
 
-    output_file.close()
+    output_file_path.close()
