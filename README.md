@@ -112,7 +112,6 @@ In our case, we loaded two local CSV files to neo4j:
   MERGE (a)-[:FIRST_LINK]->(b)
   ```
 
-  
 
 ### Vis.js application (proof-of-concept)
 The vis.js application does not rely on a graph to find paths, rather it stores all edges in a Map (src -> dest) and uses it to find a path. After prompting the user for a starting node, it queries the Map for a next node. If it exists, it adds both nodes and a link between them to a vis.js network and repeats using the next node as input. When the map does not return a next node, the loop stops and the graph is displayed.
@@ -124,13 +123,48 @@ In this case, "web mining" eventually leads to "quantitative property", which co
 ![](./Screenshots/fullpath.png)
 ### Neovis application
 
+[Project repository link](https://github.com/neo4j-contrib/neovis.js)
+
 This is a graph visualization tool powered by vis.js with data from Neo4j. We can use this tool in a simple html page using javascript. First we include the `neovis.js` file:
 
 ```html
 <script src="https://rawgit.com/neo4j-contrib/neovis.js/master/dist/neovis.js"></script>
 ```
 
-And then we can instantiate 
+And then we can instantiate new `neovis` instance:
+
+```javascript
+new NeoVis.default(config);
+```
+
+In the `config` variable, we specify :
+
+* The container id of the `html` element where the graph will be inserted
+* The Neo4j server url, user name and password
+* The graphical properties of the nodes and relationships 
+* And finally the initial cypher query to be executed
+
+```js
+var config = {
+    container_id: "viz",
+    server_url: "bolt://ec2-54-86-68-3.compute-1.amazonaws.com:7687",
+    server_user: "neo4j",
+    server_password: "i-068dfc9ff6dd04a36",
+    labels: {
+        "Page": {
+            caption: "title",
+            size: "pagerank",
+            community: "community"
+        }
+    },
+    relationships: {
+        "FIRST_LINK": {
+            caption: false
+        }
+    },
+    initial_cypher: "MATCH p=()-[r:FIRST_LINK]->() RETURN p"
+};
+```
 
 ### Neo4j analysis
 
