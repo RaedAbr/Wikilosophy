@@ -211,19 +211,35 @@ After launching the instance, use user name `neo4j` and password `the instance i
   ```
   
   
-  
-  ### Get path between a page and *philosophy*
-  
-  ```
-  MATCH (start:Page{title:'semla (mythology)'}), (end:Page{title:'philosophy'})
-  CALL algo.shortestPath.stream(start, end, 'cost')
-  YIELD nodeId, cost
-  RETURN algo.asNode(nodeId).title AS title, cost
-  ```
-  
-  Results:
-  
-  ![](./path.png)
-  
-  
+
+### Get path between a page and *philosophy*
+
+[Shortest path planning](https://neo4j.com/docs/cypher-manual/current/execution-plans/shortestpath-planning/)
+
+```
+MATCH (start:Page{title:'semla (mythology)'}), (end:Page{title:'philosophy'})
+CALL algo.shortestPath.stream(start, end, 'cost')
+YIELD nodeId, cost
+RETURN algo.asNode(nodeId).title AS title, cost
+```
+
+Results:
+
+![](./path.png)
+
+### Get the top 20 biggest component 
+
+```
+CALL algo.unionFind.stream('Page', 'FIRST_LINK', {})
+YIELD nodeId,setId
+RETURN setId,count(*) as size_of_component
+ORDER BY size_of_component desc
+LIMIT 20;
+```
+
+### Visualize path between a random page and *philosophy*
+
+```
+Match p=(p1:Page{title:"tanase"})-[FIRST_LINK*1..100]->(p3:Page{title:"philosophy"}) return p
+```
 

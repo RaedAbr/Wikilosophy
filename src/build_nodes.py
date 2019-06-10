@@ -1,7 +1,7 @@
 import csv
 
-input_file_path = "data/sample_links.csv"
-nodes_file = "data/sample_nodes.csv"
+input_file_path = "data/output_clean2.csv"
+nodes_file = "data/nodes2.csv"
 
 if __name__ == "__main__":
     data1 = []

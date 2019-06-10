@@ -1,5 +1,5 @@
 input_file_path = "data/output_file.csv"
-output_file_path = "data/output_clean.csv"
+output_file_path = "data/output_clean2.csv"
 
 
 if __name__ == "__main__":
@@ -17,6 +17,13 @@ if __name__ == "__main__":
                 line = line.replace("'", "")
                 line = line.replace("\t", "|")
                 if "|" in line:
+                    if "#" in line:
+                        tmp1 = line.split("|")
+                        tmp2 = tmp1[1].split("#")
+                        if tmp2[0] == "":
+                            continue
+                        else:
+                            line = tmp1[0] + "|" + tmp2[0] + "\n"
                     f.write(line.lower())
                     continue
             x += 1
