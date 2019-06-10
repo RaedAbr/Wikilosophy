@@ -65,6 +65,8 @@ Cypher query: <textarea rows="4" cols=50 id="cypher"></textarea><br>
 <input type="submit" value="Submit" id="reload">
 <input type="submit" value="Stabilize" id="stabilize">
 <input type="submit" value="Philosophy" id="philosophy">
+<br>
+from <input type="text" id="page1"> to <input type="text" id="page2">
 <input type="submit" value="Shortest Path" id="shortest">
 
 
@@ -87,37 +89,12 @@ Cypher query: <textarea rows="4" cols=50 id="cypher"></textarea><br>
 		viz.renderWithCypher("MATCH p=()-[r:FIRST_LINK]->({title: 'philosophy'}) RETURN p LIMIT 1000")
 	})
 	$("#shortest").click(function() {
-		
-		var txUrl = "http://ec2-54-86-68-3.compute-1.amazonaws.com:7474/db/data/transaction/commit";
-		function cypher(query,cb) {
-			$.ajax({
-				url: txUrl,
-				type: "post",
-				headers: {
-					Authorization: "Basic bmVvNGo6aS0wNjhkZmM5ZmY2ZGQwNGEzNg==",
-					"Content-Type": "application/json"
-				},
-				dataType: "application/json",
-				data: {
-					statements:[{
-						statement:query,
-						"resultDataContents" : [ "row" ]
-					}]
-				},
-				success: function(data) {
-					console.log("hello")
-					cb(null, res.body)
-				}
-			})
+		let page1 = $("#page1").val()
+		let page2 = $("#page2").val()
+		if (page1 !== "" && page2 !== "") {
+			viz.renderWithCypher("Match p=(p1:Page{title:'" + 
+				page1 +"'})-[FIRST_LINK*1..20]->(p3:Page{title:'"+ page2 +"'}) return p")
 		}
-
-
-		var query="MATCH (start:Page{title:'philosophy'}), (end:Page{title:'semla (mythology)'})" + 
-		"CALL algo.shortestPath.stream(start, end, 'cost')" +
-		"YIELD nodeId, cost RETURN algo.asNode(nodeId).title AS title, cost"
-		var cb=function(err,data) { console.log(JSON.stringify(data)) }
-
-		cypher(query,cb)
 	})
 </script>
 </html>
