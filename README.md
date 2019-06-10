@@ -210,7 +210,7 @@ ORDER by count(r) DESC;
 
   ![](Screenshots/path_between_random_page_philosophy.png)
 
-* Count the number of pages leading to **philosophy** after `10` link
+*  <a name="histo">Count the number of pages leading to **philosophy** after `10` link
 
   ```cypher
   MATCH (a:Page)-[FIRST_LINK*10]->(p:Page{title:"philosophy"}) RETURN count(a)
@@ -225,13 +225,17 @@ We can see that the distances resemble a normal distribution centred around 10. 
 ## Techniques, algorithms and tools
 
 ### Tools
-- Java
-
-- Apache Commons Compress API for decompression (Allows the use of an offset)
-
+- Python scripts to parse Wikipedia
+- [mwparserfromhell](https://github.com/earwig/mwparserfromhell) to help extract Wikicode
+- Python Bz2 library to decompress the archive with offsets
 - Neo4j (Allows graph analysis and importation using an edge list)
+- An Amazon AWS instance to store and perform operations on the graph
+
 ### Algorithms
 #### Connected components
+We used the neo4j [unionFind](https://neo4j.com/docs/graph-algorithms/current/algorithms/connected-components/) algorithm to calculate connected components and their sized.
 
+#### Unused
+While we initially tried to use neo4j's  [centrality algorithms](https://neo4j.com/docs/graph-algorithms/current/algorithms/centrality/) (notably PageRank and Harmonic Centrality on the inverted graph to calculate distances) we were unably to do so due to memory and time constraints. The PageRank algorithm quickly crashed due to lack of memory and the Harmonic Centrality did not terminate after several hours. We instead manually checked how many nodes were at distance n (see [here](#histo))
 
 ## Conclusion
